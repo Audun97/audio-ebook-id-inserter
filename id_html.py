@@ -19,7 +19,7 @@ def add_ids_to_spans(html_file):
     """
     
     # Define the output file name by splitting the input file name and adding "_processed.xhtml" to it
-    outputfile = html_file.rsplit(".", 1)[0] + "_processed.xhtml"
+    # outputfile = html_file.rsplit(".", 1)[0] + "_processed.html"
     
     # Open the input file in read mode with UTF-8 encoding
     with open(html_file, "r", encoding="utf-8") as file:
@@ -81,7 +81,7 @@ def add_ids_to_spans(html_file):
                 else:
                     print("this was caught" + str(child.string))
                         
-    with open(outputfile, "w", encoding="utf-8") as file:
+    with open(html_file, "w", encoding="utf-8") as file:
         # Write the processed soup object to the output file with no extra formatting
         file.write(soup.decode(formatter=None))
 
