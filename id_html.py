@@ -1,3 +1,4 @@
+import os
 from bs4 import BeautifulSoup, NavigableString
 import re
 
@@ -84,5 +85,10 @@ def add_ids_to_spans(html_file):
         # Write the processed soup object to the output file with no extra formatting
         file.write(soup.decode(formatter=None))
 
-add_ids_to_spans(r"part0000_split_009.html")
-print("process has completed successfully")
+directory = os.path.dirname(os.path.abspath(__file__))
+
+for filename in os.listdir(directory):
+    if filename.endswith('.html'):
+        file_path = os.path.join(directory, filename)
+        add_ids_to_spans(file_path)
+        print("process has completed successfully for " + filename + "\n")
