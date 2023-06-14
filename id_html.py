@@ -52,17 +52,19 @@ def add_ids_to_spans(html_file):
                 continue
             
             elif child.string is not None:
-                
-                # If there is no punctuation and there are alphabetical characters in the string, wrap the child in a new "span" tag
+                # if sentence does not contain comma, punctuation etc 
                 if not re.search(r'[:;!,?.]', child.string) and re.search(r'[a-zA-Z]', child.string):
+                    # If parent tag is the tag added by script then do not wrap it again
+                    if child.parent.parent.name == 'span' and child.parent.parent.get(f"f{str(id_counter).zfill(3)}") != 'true':
+                        continue
+                    #If the current span is None, create a new span
                     if current_span is None:
                         current_span = soup.new_tag("span")
                         current_span["id"] = f"f{str(id_counter).zfill(3)}"
                         id_counter += 1
                     child.wrap(current_span)
                     print("no comma \n")
-                    
-                # If there is alphabetical characters in the string, split the string into clauses and wrap each sentence in a new "span" tag
+                # if sentence contains comma, punctuation etc   
                 elif re.search(r'[a-zA-Z]', child.string):
                     current_span = None
                     sentences = re.split(r'(?<=[.?!;:,])\s+(?=[A-Za-z])', child.string)
@@ -73,15 +75,14 @@ def add_ids_to_spans(html_file):
                         span.string = sentence + " "
                         child.append(span)
                         id_counter += 1
-                        print("with comma /n")
+                        print("with comma \n")
                         
                 else:
-                    # Printing what was not caught
                     print("this was caught" + str(child.string))
                         
     with open(outputfile, "w", encoding="utf-8") as file:
         # Write the processed soup object to the output file with no extra formatting
         file.write(soup.decode(formatter=None))
 
-add_ids_to_spans(r"Ch0002.xhtml")
+add_ids_to_spans(r"part0000_split_009.html")
 print("process has completed successfully")
