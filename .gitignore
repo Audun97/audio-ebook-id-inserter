@@ -128,6 +128,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# ignore html and xhtml sample files
+# html and xhtml sample files
 *.html
 *.xhtml 
+
+# VS Code workspace
+audio-ebook-id-inserter.code-workspace
