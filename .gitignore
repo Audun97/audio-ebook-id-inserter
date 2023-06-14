@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# ignore html and xhtml sample files
+*.html
+*.xhtml 
