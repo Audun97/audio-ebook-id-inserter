@@ -53,7 +53,7 @@ def add_ids_to_spans(html_file):
             
             elif child.string is not None:
                 # if sentence does not contain comma, punctuation etc 
-                if not re.search(r'[:;!,?.]', child.string) and re.search(r'[a-zA-Z]', child.string):
+                if not re.search(r'[:;!,?.]', child.string) and re.search(r'\w', child.string):
                     # If parent tag is the tag added by script then do not wrap it again
                     if child.parent.parent.name == 'span' and child.parent.parent.get(f"f{str(id_counter).zfill(3)}") != 'true':
                         continue
@@ -65,9 +65,9 @@ def add_ids_to_spans(html_file):
                     child.wrap(current_span)
                     print("no comma \n")
                 # if sentence contains comma, punctuation etc   
-                elif re.search(r'[a-zA-Z]', child.string):
+                elif re.search(r'\w', child.string):
                     current_span = None
-                    sentences = re.split(r'(?<=[.?!;:,])\s+(?=[A-Za-z])', child.string)
+                    sentences = re.split(r'(?<=[.?!;:,])\s+(?=\w)', child.string)
                     child.clear()
                     for sentence in sentences:
                         span = soup.new_tag("span")
