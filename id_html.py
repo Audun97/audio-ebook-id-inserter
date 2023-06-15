@@ -34,6 +34,31 @@ def add_ids_to_spans(html_file):
     # Loop through each p element
     for p in p_elements:
         
+        # If there are not tags inside p
+        if isinstance(p.string, NavigableString):
+                # if sentence does not contain comma, punctuation etc 
+                if not re.search(r'[:;!,?.]', p.string) and re.search(r'\w', p.string):
+                    current_span = soup.new_tag("span")
+                    current_span["id"] = f"f{str(id_counter).zfill(3)}"
+                    id_counter += 1
+                    p.wrap(current_span)
+                    print("no comma \n")
+                # if sentence contains comma, punctuation etc   
+                elif re.search(r'\w', p.string):
+                    current_span = None
+                    sentences = re.split(r'(?<=[.?!;:,])\s+(?=\w)', p.string)
+                    p.clear()
+                    for sentence in sentences:
+                        span = soup.new_tag("span")
+                        span["id"] = f"f{str(id_counter).zfill(3)}"
+                        span.string = sentence + " "
+                        p.append(span)
+                        id_counter += 1
+                        print("with comma \n")
+                else:
+                    print("this was caught" + str(p.string))
+                continue
+        
         # Get all the descendants of the current "p" element. Not feeding it directly into the next loop to prevent an endless loop
         children = list(p.descendants)
         
@@ -76,7 +101,6 @@ def add_ids_to_spans(html_file):
                         child.append(span)
                         id_counter += 1
                         print("with comma \n")
-                        
                 else:
                     print("this was caught" + str(child.string))
                         
@@ -84,5 +108,5 @@ def add_ids_to_spans(html_file):
         # Write the processed soup object to the output file with no extra formatting
         file.write(soup.decode(formatter=None))
 
-add_ids_to_spans(r"part0000_split_009.html")
+add_ids_to_spans(r"chapter-1-1-1.xhtml")
 print("process has completed successfully")
