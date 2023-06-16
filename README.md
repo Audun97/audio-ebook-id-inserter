@@ -9,5 +9,6 @@ pip install beautifulsoup4
 ```
 pip install lxml
 ```
+I advice setting up a virtual environment
 ## See
 - [Syncabook's Github Page](https://github.com/r4victor/syncabook)
