@@ -121,10 +121,11 @@ def add_ids_to_spans(html_file):
         # Write the processed soup object to the output file with no extra formatting
         file.write(soup.decode(formatter=None))
 
+# __file__ is a special variable that contains the path to the current file. You can change to the directory of you choice
 directory = os.path.dirname(os.path.abspath(__file__))
 
 for filename in os.listdir(directory):
-    if filename.endswith('.xhtml'):
+    if filename.endswith('.xhtml') or filename.endswith('.html'):
         file_path = os.path.join(directory, filename)
         add_ids_to_spans(file_path)
         print("process has completed successfully for " + filename + "\n")
