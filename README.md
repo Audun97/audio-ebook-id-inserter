@@ -2,7 +2,7 @@
 ## What it does
 Adds spans with ID attributes to xHTML/HTML files so that they can be synced with syncabook
 ## How to use
-Run the script in the same directory as your xHTML/HTML files You must have Beautifulspoup4 and lxml installed
+Run the script in the same directory as your xHTML/HTML files. It will then process every file. You must have Beautifulspoup4 and lxml installed
 ```
 pip install beautifulsoup4
 ```
