@@ -1,5 +1,6 @@
 import os
 import xml.etree.ElementTree as ET
+from mutagen.mp3 import MP3
 
 def get_smil_files(folder_path):
     smil_files = []
@@ -10,18 +11,28 @@ def get_smil_files(folder_path):
 
 def parse_smil_files(smil_files):
     smil_data = []
+    total_duration = 0
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     for smil_file in smil_files:
         tree = ET.parse(smil_file)
         root = tree.getroot()
         seq_element = root.find('.//{http://www.w3.org/ns/SMIL}seq')
+        par_element = seq_element.find('.//{http://www.w3.org/ns/SMIL}par')
+        audio_element = par_element.find('.//{http://www.w3.org/ns/SMIL}audio')
+        audio_src = audio_element.attrib['src']
+        audio_file = os.path.join(base_dir, audio_src[3:])
+        audio = MP3(audio_file)
+        seq_duration = audio.info.length
+        total_duration += seq_duration
         smil_data.append({
             'id': seq_element.attrib['id'],
             'href': smil_file,
-            'media-type': 'application/smil+xml'
+            'media-type': 'application/smil+xml',
+            'duration': seq_duration
         })
-    return smil_data
+    return smil_data, total_duration
 
-def update_opf_file(opf_file, smil_data):
+def update_opf_file(opf_file, smil_data, total_duration):
     tree = ET.parse(opf_file)
     root = tree.getroot()
 
@@ -33,13 +44,18 @@ def update_opf_file(opf_file, smil_data):
         media_duration = ET.SubElement(metadata, '{http://www.idpf.org/2007/opf}meta')
         media_duration.set('property', 'media:duration')
         media_duration.set('refines', f'#{smil_info["id"]}')
-        media_duration.text = '00:00:00'  # Replace with the actual duration of the audio file
+        media_duration.text = f'{smil_info["duration"]:.3f}'
 
         # Add Manifest item
         item = ET.SubElement(manifest, '{http://www.idpf.org/2007/opf}item')
         item.set('id', smil_info['id'])
         item.set('href', smil_info['href'])
         item.set('media-type', smil_info['media-type'])
+
+    # Add total duration metadata
+    total_duration_meta = ET.SubElement(metadata, '{http://www.idpf.org/2007/opf}meta')
+    total_duration_meta.set('property', 'media:duration')
+    total_duration_meta.text = f'{total_duration:.3f}'
 
     tree.write(opf_file, encoding='utf-8', xml_declaration=True)
 
@@ -48,6 +64,6 @@ smil_folder = 'smil'
 opf_file = r'C:\Users\Audun\Desktop\dostoy\epub\content.opf'
 
 smil_files = get_smil_files(smil_folder)
-smil_data = parse_smil_files(smil_files)
-update_opf_file(opf_file, smil_data)
+smil_data, total_duration = parse_smil_files(smil_files)
+update_opf_file(opf_file, smil_data, total_duration)
 
