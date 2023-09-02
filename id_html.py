@@ -164,7 +164,7 @@ def add_ids_to_spans(html_file):
                         
     with open(html_file, "w", encoding="utf-8") as file:
         # Write the processed soup object to the output file with no extra formatting
-        file.write(soup.decode(formatter=None))
+        file.write(soup.decode(formatter="minimal"))
 
 # Function to add a link to the css file to the head of the html file
 def add_link_to_css(html_file):
@@ -187,7 +187,7 @@ def add_link_to_css(html_file):
         
     with open(html_file, "w", encoding="utf-8") as file:
         # Write the processed soup object to the output file with no extra formatting
-        file.write(soup.decode(formatter=None))
+        file.write(soup.decode(formatter="minimal"))
         
 # __file__ is a special variable that contains the path to the current file. You can change to the directory of you choice
 directory = r"C:\Users\Audun\book\sync_text"
