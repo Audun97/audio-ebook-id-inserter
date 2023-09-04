@@ -137,3 +137,5 @@ audio-ebook-id-inserter.code-workspace
 
 # uncommented script
 id_html_no_doc.py
+
+test_book/

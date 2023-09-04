@@ -189,8 +189,7 @@ def add_link_to_css(html_file):
         # Write the processed soup object to the output file with no extra formatting
         file.write(soup.decode(formatter="minimal"))
         
-# __file__ is a special variable that contains the path to the current file. You can change to the directory of you choice
-directory = r"C:\Users\Audun\book\sync_text"
+directory = "test_book\\EPUB\\sync_text"
 
 file_count = 0
 
